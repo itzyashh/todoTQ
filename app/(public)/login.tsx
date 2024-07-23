@@ -1,17 +1,35 @@
 import { StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import React from 'react'
 import { Link, Stack } from 'expo-router'
+import { login } from '@/api/auth'
 
 const Page = () => {
+
+  const [email, setEmail] = React.useState('')
+  const [password, setPassword] = React.useState('')
+  const [error, setError] = React.useState('')
+  const [loading, setLoading] = React.useState(false)
+
+  const onSubmit = async () => {
+    setLoading(true)
+    await login(email, password)
+  }
+
+
   return (
     <View style={styles.container}>
       <Stack.Screen options={{ title: 'Login' }} />
       <Text style={styles.logo}>Login</Text>
       <View style={styles.inputContainer}>
-        <TextInput style={styles.input} placeholder='Email' />
-        <TextInput style={styles.input} placeholder='Password' />
+        <TextInput
+         autoCapitalize='none'
+         value={email} onChangeText={setEmail}
+         style={styles.input} placeholder='Email' />
+        <TextInput
+         secureTextEntry value={password} onChangeText={setPassword}
+         style={styles.input} placeholder='Password' />
       </View>
-      <TouchableOpacity activeOpacity={0.7} style={styles.button}>
+      <TouchableOpacity activeOpacity={0.7} style={styles.button} onPress={onSubmit}>
         <Text>Login</Text>
       </TouchableOpacity>
       <View style={styles.registerContainer}>
