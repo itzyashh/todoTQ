@@ -5,8 +5,8 @@ import { login } from '@/api/auth'
 
 const Page = () => {
 
-  const [email, setEmail] = React.useState('')
-  const [password, setPassword] = React.useState('')
+  const [email, setEmail] = React.useState('yashjadhav@email.com')
+  const [password, setPassword] = React.useState('12345')
   const [error, setError] = React.useState('')
   const [loading, setLoading] = React.useState(false)
 
@@ -34,7 +34,6 @@ const Page = () => {
       </TouchableOpacity>
       <View style={styles.registerContainer}>
         <Text>Don't have an account? <Link asChild href='/register'>
-
             <Text style={styles.register}>Register</Text></Link></Text></View>
     </View>
   )

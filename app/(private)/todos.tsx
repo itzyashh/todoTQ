@@ -1,7 +1,8 @@
 import { StyleSheet, Text, View } from 'react-native'
 import React from 'react'
+import { Stack } from 'expo-router'
 
-const todos = () => {
+const Page = () => {
   return (
     <View>
       <Text>todos</Text>
@@ -9,6 +10,6 @@ const todos = () => {
   )
 }
 
-export default todos
+export default Page
 
 const styles = StyleSheet.create({})

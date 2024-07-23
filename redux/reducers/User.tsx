@@ -1,4 +1,5 @@
 import {createSlice} from '@reduxjs/toolkit';
+import * as SecureStore from 'expo-secure-store';
 
 type UserState = {
     user: any;
@@ -17,22 +18,26 @@ const initialState: UserState = {
   isLogged: false,
 };
 
+
 const User = createSlice({
     name: 'User',
     initialState,
     reducers: {
         onLogin: (state, action: {payload: LoginPayload}) => {
             state.user = action.payload.user;
-            state.token = action.payload.token;
             state.isLogged = true;
+        },
+        setToken: (state, action: {payload: string}) => {
+            state.token = action.payload;
         },
         onLogout: (state) => {
             state.user = null;
             state.token = null;
             state.isLogged = false;
+            SecureStore.deleteItemAsync('token')
         },
     },
 });
 
-export const {onLogin, onLogout} = User.actions;
+export const {onLogin, onLogout, setToken} = User.actions;
 export default User.reducer;
