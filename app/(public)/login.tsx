@@ -1,20 +1,24 @@
 import { StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import React from 'react'
 import { Link, Stack } from 'expo-router'
-import { login } from '@/api/auth'
+import { useAuth } from '@/provider/AuthProvider'
+import Spinner from 'react-native-loading-spinner-overlay';
 
 const Page = () => {
 
-  const [email, setEmail] = React.useState('')
-  const [password, setPassword] = React.useState('')
+  const [email, setEmail] = React.useState('yashjadhav@email.com')
+  const [password, setPassword] = React.useState('12345')
   const [error, setError] = React.useState('')
   const [loading, setLoading] = React.useState(false)
-
+  const { onLogin } = useAuth()
   const onSubmit = async () => {
     setLoading(true)
-    await login(email, password)
+    await onLogin!(email, password).finally(() => setLoading(false))
   }
 
+  if (loading) {
+    return <Spinner visible={loading} color='#fb5b5a' />
+      }
 
   return (
     <View style={styles.container}>

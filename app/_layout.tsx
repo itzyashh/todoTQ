@@ -1,13 +1,35 @@
-import { Slot } from "expo-router"
-import { Provider } from "react-redux"
-import store from "../redux/store"
+import { AuthProvider, useAuth } from "@/provider/AuthProvider"
+import { QueryClientProvider, QueryClient } from "@tanstack/react-query"
+import { Slot, useRouter } from "expo-router"
+import { useEffect } from "react"
 
-
+const queryClient = new QueryClient()
 const RootLayout = () => {
+    const InternalLayout = () => {
+
+        const { token, initialized } = useAuth()
+        console.log('token at root', token)
+        const router = useRouter()
+    
+        useEffect(() => {
+            if (!initialized) {
+                return
+            }
+            if (token) {
+                router.replace("/(auth)/todos")
+            } else {
+                router.replace("/(public)/login")
+            }
+        }, [token, initialized])
+        return <Slot />
+    }
+
     return (
-        <Provider store={store}>
-            <Slot />
-        </Provider>
+        <AuthProvider>
+            <QueryClientProvider client={queryClient}>
+            <InternalLayout />
+            </QueryClientProvider>
+        </AuthProvider>
     )
 
 }
