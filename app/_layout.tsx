@@ -2,6 +2,7 @@ import { AuthProvider, useAuth } from "@/provider/AuthProvider"
 import { QueryClientProvider, QueryClient } from "@tanstack/react-query"
 import { Slot, useRouter } from "expo-router"
 import { useEffect } from "react"
+import { gestureHandlerRootHOC } from "react-native-gesture-handler"
 
 const queryClient = new QueryClient()
 const RootLayout = () => {
@@ -34,4 +35,4 @@ const RootLayout = () => {
 
 }
 
-export default RootLayout
+export default gestureHandlerRootHOC(RootLayout)
