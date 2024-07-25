@@ -1,5 +1,5 @@
-import { StyleSheet, Text, View } from 'react-native'
-import React from 'react'
+import { StyleSheet, Text, TextInput, View } from 'react-native'
+import React, { useCallback } from 'react'
 import { Todo } from '@/api/todos'
 import { Feather, Ionicons, MaterialIcons } from '@expo/vector-icons';
 
@@ -7,23 +7,44 @@ import { Feather, Ionicons, MaterialIcons } from '@expo/vector-icons';
 type TodoItemProps = {
     data: Todo
     index: number
+    onEdit: (todo: Todo) => void
+    onDelete: (id: string) => void
 }
 
-const TodoItem : React.FC<TodoItemProps> = ({data, index}) => {
+const TodoItem : React.FC<TodoItemProps> = ({data, index, onEdit, onDelete}) => {
+    const [task, setTask] = React.useState(data.task)   
+
+    const onToggle = () => {
+        data.status = data.status === 1 ? 0 : 1
+        onEdit(data)
+    } 
+
+    const onTextChange = (text: string) => {
+        setTask(text)
+        data.task = text
+        onEdit(data)
+    }
+
+
   return (
     <View style={styles.container}>
         <View style={styles.groupIcons}>
 
         {
-            index % 2 === 0           
-            ? <Feather name="check-circle" size={24} color="#46b31e"  /> : <Feather name="circle" size={24} color="black" />
+            data.status === 1       
+            ? <Feather
+            onPress={onToggle}
+            name="check-circle" size={24} color="#46b31e"  /> : <Feather onPress={onToggle}
+             name="circle" size={24} color="black" />
         }
 
-      <Text style={styles.title}>{data.task}</Text>
+      <TextInput style={styles.title} value={task} onChangeText={onTextChange} />
         </View>
         <View style={[styles.groupIcons,{gap:25}]}>
       <MaterialIcons name="photo-camera" size={27} color="black" />
-      <Ionicons name="trash-bin-outline" size={27} color="#e67272" />
+      <Ionicons
+       onPress={() => onDelete(data._id)}
+       name="trash-bin-outline" size={27} color="#e67272" />
       </View>
     </View>
   )

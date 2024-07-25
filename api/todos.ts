@@ -24,3 +24,13 @@ export const createTodo = async (task: string, img?: string) => {
     const response = await API.post<Todo>(`${BASE_URL}/todos`, todo)
     return response.data
 }
+
+export const updateTodo = async (todo: Todo) => {
+    const response = await API.put<Todo>(`${BASE_URL}/todos/${todo._id}`, todo)
+    return response.data
+}
+
+export const deleteTodo = async (id: string) => {
+    await API.delete(`${BASE_URL}/todos/${id}`)
+    return id
+}
