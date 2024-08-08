@@ -1,7 +1,7 @@
-import { StyleSheet, Text, TextInput, View } from 'react-native'
-import React, { useCallback } from 'react'
-import { Todo } from '@/api/todos'
-import { Feather, Ionicons, MaterialIcons } from '@expo/vector-icons';
+import { StyleSheet, TextInput, View } from 'react-native';
+import React from 'react';
+import { Todo } from '@/api/todos';
+import { Feather, Ionicons, MaterialIcons, MaterialCommunityIcons } from '@expo/vector-icons';
 
 
 type TodoItemProps = {
@@ -28,6 +28,8 @@ const TodoItem : React.FC<TodoItemProps> = ({data, index, onEdit, onDelete}) => 
 
   return (
     <View style={styles.container}>
+        { data.isSynced === false &&
+        <MaterialCommunityIcons style={styles.unsync} name="cloud-off-outline" size={24} color="black" />}
         <View style={styles.groupIcons}>
 
         {
@@ -81,5 +83,12 @@ elevation: 5,
         flexDirection: 'row',
         alignItems: 'center',
         gap: 10
+    },
+    unsync: {
+        position: 'absolute',
+        top: 10,
+        right: 10,
+        fontSize: 18,
+        color: 'orange'
     }
 })

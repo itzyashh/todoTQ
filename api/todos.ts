@@ -7,6 +7,7 @@ export type Todo = {
     task: string,
     status: number,
     img: string,
+    isSynced?: boolean,
 }
 
 export const getTodos = async () => {
@@ -15,6 +16,11 @@ export const getTodos = async () => {
 }
 
 export const createTodo = async (task: string, img?: string) => {
+
+    // get axios header
+    const header = API.defaults.headers.common['Authorization']
+    console.log('header', header)
+
     const todo = {
         task,
         desc: '',

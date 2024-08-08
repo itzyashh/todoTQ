@@ -6,32 +6,50 @@ import TodoItem from '@/components/TodoItem'
 import { AntDesign } from '@expo/vector-icons'
 import BottomSheet from '@/components/BottomSheet'
 import Spinner from 'react-native-loading-spinner-overlay'
+import OfflineSimulator from '@/components/OfflineSimulator'
+
+  export const createTodoMutation = async (task: string, img?: string) => createTodo(task)
+  export const updateTodoMutation = async (todo: Todo) => updateTodo(todo)
+  export const deleteTodoMutation = async (id: string) => deleteTodo(id)
 
 const Page = () => {
-
   const client = useQueryClient()
   const [bottomSheetVisible, setBottomSheetVisible] = React.useState(false)
-  const {data, isLoading, error} = useQuery({
+  const {data, isLoading} = useQuery({
     queryKey: ['todos'],
     queryFn: getTodos,
   })
 
-  const {mutate, isPending, error: mutationErr} = useMutation({
-    mutationFn: (task: string) => createTodo(task),
-    onSuccess: () => {
+
+
+  const {mutate} = useMutation({
+    mutationKey: ['createTodo'],
+    mutationFn: createTodoMutation,
+    onMutate: async (task) => {
+      await client.cancelQueries({queryKey: ['todos']})
+      client.setQueryData(['todos'], (prev: Todo[] = []) => [...prev, {
+        task,
+         _id: Math.random().toString(),
+         isSynced: false,
+        }])
+    },
+    onError: (err) => console.log('err', err),
+
+    onSettled: () => {
       client.invalidateQueries({ queryKey: ['todos'] })
     }
   })
 
   const { mutate: updateMutation} = useMutation({
-    mutationFn: async (updatedTodo: Todo) => updateTodo(updatedTodo),
+    mutationKey: ['updateTodo'],
+    mutationFn: updateTodoMutation,
     onSuccess: (updatedTodo) => {
       client.setQueryData(['todos'], (prev: Todo[]) => prev.map((todo) => todo._id === updatedTodo._id ? updatedTodo : todo))
     }
   })
 
   const { mutate: deleteMutation} = useMutation({
-    mutationFn: async (id: string) => deleteTodo(id),
+    mutationFn: deleteTodoMutation,
     onError: (err) => console.log('err', err),
     onSuccess: (id) => {
       client.setQueryData(['todos'], (prev: Todo[] = []) => prev.filter((todo) => todo._id !== id))
@@ -44,12 +62,13 @@ const Page = () => {
 
   if (isLoading) {
     return <Spinner visible={true} color='#fb5b5a' />
-      }
+  }
 
-  console.log('isPending', isPending)
-  console.log('mutationErr', mutationErr)
+
+
   return (
     <View style={{flex: 1}}>
+      <OfflineSimulator />
       <FlatList
         data={data}
         contentContainerStyle={{marginTop: 20}}
