@@ -3,7 +3,7 @@ import { QueryClient } from "@tanstack/react-query"
 import { Slot, useRouter } from "expo-router"
 import { useEffect } from "react"
 import { gestureHandlerRootHOC } from "react-native-gesture-handler"
-import { useReactQueryDevTools } from '@dev-plugins/react-query'
+
 import { createAsyncStoragePersister } from "@tanstack/query-async-storage-persister";
 import { PersistQueryClientProvider } from "@tanstack/react-query-persist-client";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -39,7 +39,7 @@ export const logPersistedData = async () => {
 };
 
 // keeping logging for every 5 seconds
-
+// setInterval(logPersistedData, 5000);
 
 
 const InternalLayout = () => {
@@ -65,7 +65,7 @@ queryClient.setMutationDefaults(['createTodo'], {
   mutationFn: async (task: string, img?: string) => {
     queryClient.cancelQueries({ queryKey: ['todos'] })
     console.log('createTodo', task, img)
-    return await createTodoMutation(task, img).then(() => console.log('createTodo done')).catch(console.error)
+    return await createTodo(task, img).then(() => console.log('createTodo done')).catch(console.error)
   }
 
 })
@@ -80,16 +80,12 @@ console.log('queryClient', queryClient.getMutationCache())
 
 
 const RootLayout = () => {
-  useReactQueryDevTools(queryClient)
 
   return (
     <AuthProvider> 
       <PersistQueryClientProvider
         client={queryClient}
         persistOptions={{ persister: asyncStoragePersister }}
-        onSuccess={() => {
-          queryClient.resumePausedMutations().then(() => queryClient.invalidateQueries()).catch(console.error)
-        }}
       >
         <InternalLayout />
       </PersistQueryClientProvider>

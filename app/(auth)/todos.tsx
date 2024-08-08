@@ -1,5 +1,5 @@
 import { FlatList, Pressable, StyleSheet, View } from 'react-native'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { createTodo, deleteTodo, getTodos, Todo, updateTodo } from '@/api/todos'
 import TodoItem from '@/components/TodoItem'
@@ -20,7 +20,9 @@ const Page = () => {
     queryFn: getTodos,
   })
 
-
+  useEffect(() => {
+    client.resumePausedMutations().then(() => client.invalidateQueries()).catch(console.error)
+  }, [])
 
   const {mutate} = useMutation({
     mutationKey: ['createTodo'],
@@ -63,6 +65,8 @@ const Page = () => {
   if (isLoading) {
     return <Spinner visible={true} color='#fb5b5a' />
   }
+
+ 
 
 
 
