@@ -72,7 +72,7 @@ queryClient.setMutationDefaults(['createTodo'], {
 
 queryClient.setMutationDefaults(['updateTodo'], {
   mutationFn: async (todo: Todo) => {
-    return updateTodoMutation(todo)
+    return await updateTodoMutation(todo)
   }
 })
 console.log('queryClient', queryClient.getMutationCache())

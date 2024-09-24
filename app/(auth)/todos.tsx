@@ -8,7 +8,7 @@ import BottomSheet from '@/components/BottomSheet'
 import Spinner from 'react-native-loading-spinner-overlay'
 import OfflineSimulator from '@/components/OfflineSimulator'
 
-  export const createTodoMutation = async (task: string, img?: string) => createTodo(task)
+
   export const updateTodoMutation = async (todo: Todo) => updateTodo(todo)
   export const deleteTodoMutation = async (id: string) => deleteTodo(id)
 
@@ -26,7 +26,7 @@ const Page = () => {
 
   const {mutate} = useMutation({
     mutationKey: ['createTodo'],
-    mutationFn: createTodoMutation,
+    mutationFn: createTodo,
     onMutate: async (task) => {
       await client.cancelQueries({queryKey: ['todos']})
       client.setQueryData(['todos'], (prev: Todo[] = []) => [...prev, {
