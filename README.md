@@ -12,11 +12,6 @@ Features
     Efficient Task Management: Create, update, and delete tasks easily with a user-friendly interface.
     Built with TanStack Query: Leveraging powerful state management and data fetching capabilities for a smooth user experience.
 
-# Tech Stack
-
-    Frontend: React, TanStack Query
-    Backend: Node.js, Express
-    Database: MongoDB
 
 # Getting Started
 
